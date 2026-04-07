@@ -33,13 +33,13 @@ on:
 jobs:    
 
   version:
-    if: inputs.skip-version == 'true'
+    if: ${{ inputs.skip-version == 'true' }}
     runs-on: ubuntu-latest
     steps:
     - uses: yadickson/actions/version@v1
 
   install:
-    if: inputs.skip-install == 'true'
+    if: ${{ inputs.skip-install == 'true' }}
     needs: version
     runs-on: ubuntu-latest
     container:
@@ -48,7 +48,7 @@ jobs:
     - uses: yadickson/actions/install@v1
 
   build:
-    if: inputs.skip-build == 'true'
+    if: ${{ inputs.skip-build == 'true' }}
     needs: install
     runs-on: ubuntu-latest
     container:
@@ -57,7 +57,7 @@ jobs:
     - uses: yadickson/actions/build@v1
 
   test:
-    if: inputs.skip-test == 'true'
+    if: ${{ inputs.skip-test == 'true' }}
     name: "unit testing"
     needs: build
     runs-on: ubuntu-latest
@@ -67,7 +67,7 @@ jobs:
     - uses: yadickson/actions/test@v1
 
   coverage:
-    if: inputs.skip-coverage == 'true'
+    if: ${{ inputs.skip-coverage == 'true' }}
     name: "coverage report"
     needs: build
     runs-on: ubuntu-latest
@@ -77,7 +77,7 @@ jobs:
     - uses: yadickson/actions/coverage@v1
 
   mutation:
-    if: inputs.skip-mutation == 'true'
+    if: ${{ inputs.skip-mutation == 'true' }}
     name: "mutation testing"
     needs: build
     runs-on: ubuntu-latest
@@ -87,8 +87,8 @@ jobs:
     - uses: yadickson/actions/mutation@v1
 
   badge:
-    if: inputs.skip-badget == 'true'
-    needs: [test, coverage]
+    if: ${{ inputs.skip-badget == 'true' }}
+    needs: [test, coverage, mutation]
     runs-on: ubuntu-latest
     container:
       image: node:22-slim
