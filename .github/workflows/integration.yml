@@ -33,7 +33,6 @@ on:
 jobs:    
 
   version:
-    name: ${{ inputs.skip-version == false && 'version' || 'DISABLED' }}
     if: ${{ inputs.skip-version != true }}
     runs-on: ubuntu-latest
     steps:
@@ -88,7 +87,7 @@ jobs:
     - uses: yadickson/actions/mutation@v1
 
   badge:
-    if: ${{ inputs.skip-badge != true }}
+    if: ${{ always() && !failure() && !cancelled() && inputs.skip-badge != true }}
     needs: [test, coverage, mutation]
     runs-on: ubuntu-latest
     container:
