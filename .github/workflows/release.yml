@@ -1,0 +1,58 @@
+---
+name: "release and tagged"
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+
+  cleaning:
+    name: cleaning
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: version
+      run: |
+        VERSION=$(echo "${{ github.ref_name }}" | awk -F. '{print $1}')
+        echo "VERSION=${VERSION}" >> $GITHUB_ENV
+      shell: bash
+    - uses: dev-drprasad/delete-tag-and-release@v1.1
+      continue-on-error: true
+      with:
+        delete_release: true
+        tag_name: ${{ env.VERSION }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+
+  release:
+    name: release
+    needs: cleaning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.ACTIONS_TOKEN }}
+          make_latest: true
+
+  tagged:
+    name: tagged
+    needs: release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: version
+        run: |
+          VERSION=$(echo "${{ github.ref_name }}" | awk -F. '{print $1}')
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+        shell: bash
+      - name: tagged
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.ACTIONS_TOKEN }}
+          tag_name: ${{ env.VERSION }}
+          make_latest: false
+
