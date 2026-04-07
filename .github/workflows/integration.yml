@@ -88,7 +88,7 @@ jobs:
     - uses: yadickson/actions/mutation@v1
 
   badge:
-    if: ${{ inputs.skip-badget != true }}
+    if: ${{ inputs.skip-badge != true }}
     needs: [test, coverage, mutation]
     runs-on: ubuntu-latest
     container:
