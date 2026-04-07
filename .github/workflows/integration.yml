@@ -84,8 +84,8 @@ jobs:
     container:
       image: node:22-slim
     steps:
-    - name: Install procps
-      run: apk add --no-cache procps
+    - name: install procps
+      run: apt-get update && apt-get install -y procps
     - uses: yadickson/actions/mutation@v1
 
   badge:
