@@ -33,6 +33,7 @@ on:
 jobs:    
 
   version:
+    name: ${{ inputs.skip-version == false && 'version' || 'DISABLED' }}
     if: ${{ inputs.skip-version != true }}
     runs-on: ubuntu-latest
     steps:
