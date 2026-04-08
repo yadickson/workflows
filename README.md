@@ -27,7 +27,7 @@ jobs:
 *How to use in node project*
 
 ```yaml
-name: Python Build Process
+name: Node Build Process
 
 on:
   push:
