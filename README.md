@@ -20,7 +20,7 @@ jobs:
   ci:
     uses: yadickson/workflows/.github/workflows/integration.yml@v1
     with:
-      container-image: python:3.12-alpine
+      container-image: python:3.12-slim
     secrets: inherit
 ```
 
