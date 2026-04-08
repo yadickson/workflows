@@ -1,6 +1,9 @@
 on:
   workflow_call:
     inputs:
+      container-image:
+        type: string
+        required: true
       skip-version:
         type: boolean
         default: false
@@ -43,7 +46,7 @@ jobs:
     needs: version
     runs-on: ubuntu-latest
     container:
-      image: node:22-slim
+      image: ${{ inputs.container-image }}
     steps:
     - uses: yadickson/actions/install@v1
 
@@ -52,7 +55,7 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     container:
-      image: node:22-slim
+      image: ${{ inputs.container-image }}
     steps:
     - uses: yadickson/actions/build@v1
 
@@ -62,7 +65,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     container:
-      image: node:22-slim
+      image: ${{ inputs.container-image }}
     steps:
     - uses: yadickson/actions/test@v1
 
@@ -72,7 +75,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     container:
-      image: node:22-slim
+      image: ${{ inputs.container-image }}
     steps:
     - uses: yadickson/actions/coverage@v1
 
@@ -82,7 +85,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     container:
-      image: node:22-slim
+      image: ${{ inputs.container-image }}
     steps:
     - name: install procps
       run: apt-get update && apt-get install -y procps
@@ -93,7 +96,7 @@ jobs:
     needs: [test, coverage, mutation]
     runs-on: ubuntu-latest
     container:
-      image: node:22-slim
+      image: ${{ inputs.container-image }}
     steps:
     - uses: yadickson/actions/badge@v1
       with:
