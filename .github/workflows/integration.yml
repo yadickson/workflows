@@ -64,7 +64,7 @@ jobs:
 
   lint:
     if: ${{ always() && !failure() && !cancelled() && inputs.skip-lint != true }}
-    needs: install
+    needs: build
     runs-on: ubuntu-latest
     container:
       image: ${{ inputs.container-image }}
@@ -84,7 +84,7 @@ jobs:
   coverage:
     if: ${{ always() && !failure() && !cancelled() && inputs.skip-coverage != true }}
     name: "coverage report"
-    needs: build
+    needs: lint
     runs-on: ubuntu-latest
     container:
       image: ${{ inputs.container-image }}
@@ -94,7 +94,7 @@ jobs:
   mutation:
     if: ${{ always() && !failure() && !cancelled() && inputs.skip-mutation != true }}
     name: "mutation testing"
-    needs: build
+    needs: lint
     runs-on: ubuntu-latest
     container:
       image: ${{ inputs.container-image }}
