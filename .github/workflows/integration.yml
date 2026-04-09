@@ -110,7 +110,10 @@ jobs:
     container:
       image: ${{ inputs.container-image }}
     steps:
+    - id: version
+      uses: yadickson/actions/version@v1
     - uses: yadickson/actions/badge@v1
       with:
+        version: ${{ steps.version.outputs.version }}
         gist-id: ${{ secrets.GIST_ID }}
         gist-token: ${{ secrets.GIST_TOKEN }}
