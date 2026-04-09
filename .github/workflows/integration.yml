@@ -114,6 +114,6 @@ jobs:
       uses: yadickson/actions/version@v1
     - uses: yadickson/actions/badge@v1
       with:
-        version: steps.project_version.outputs.version
+        version: ${{ steps.project_version.outputs.version }}
         gist-id: ${{ secrets.GIST_ID }}
         gist-token: ${{ secrets.GIST_TOKEN }}
