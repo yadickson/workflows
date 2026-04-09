@@ -13,6 +13,9 @@ on:
       skip-build:
         type: boolean
         default: false
+      skip-lint:
+        type: boolean
+        default: false
       skip-test:
         type: boolean
         default: false
@@ -42,7 +45,7 @@ jobs:
     - uses: yadickson/actions/version@v1
 
   install:
-    if: ${{ inputs.skip-install != true }}
+    if: ${{ always() && !failure() && !cancelled() && inputs.skip-install != true }}
     needs: version
     runs-on: ubuntu-latest
     container:
@@ -51,7 +54,7 @@ jobs:
     - uses: yadickson/actions/install@v1
 
   build:
-    if: ${{ inputs.skip-build != true }}
+    if: ${{ always() && !failure() && !cancelled() && inputs.skip-build != true }}
     needs: install
     runs-on: ubuntu-latest
     container:
@@ -59,10 +62,19 @@ jobs:
     steps:
     - uses: yadickson/actions/build@v1
 
+  lint:
+    if: ${{ always() && !failure() && !cancelled() && inputs.skip-lint != true }}
+    needs: install
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ inputs.container-image }}
+    steps:
+    - uses: yadickson/actions/lint@v1
+
   test:
-    if: ${{ inputs.skip-test != true }}
+    if: ${{ always() && !failure() && !cancelled() && inputs.skip-test != true }}
     name: "unit testing"
-    needs: build
+    needs: lint
     runs-on: ubuntu-latest
     container:
       image: ${{ inputs.container-image }}
@@ -70,7 +82,7 @@ jobs:
     - uses: yadickson/actions/test@v1
 
   coverage:
-    if: ${{ inputs.skip-coverage != true }}
+    if: ${{ always() && !failure() && !cancelled() && inputs.skip-coverage != true }}
     name: "coverage report"
     needs: build
     runs-on: ubuntu-latest
@@ -80,7 +92,7 @@ jobs:
     - uses: yadickson/actions/coverage@v1
 
   mutation:
-    if: ${{ inputs.skip-mutation != true }}
+    if: ${{ always() && !failure() && !cancelled() && inputs.skip-mutation != true }}
     name: "mutation testing"
     needs: build
     runs-on: ubuntu-latest
