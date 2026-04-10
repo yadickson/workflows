@@ -41,6 +41,8 @@ jobs:
   version:
     if: ${{ inputs.skip-version != true }}
     runs-on: ubuntu-latest
+    container:
+      image: ${{ inputs.container-image }}
     steps:
     - uses: yadickson/actions/version@v1
       with:
