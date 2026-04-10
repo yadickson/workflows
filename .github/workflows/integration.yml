@@ -43,6 +43,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: yadickson/actions/version@v1
+      with:
+        gist-id: ${{ secrets.GIST_ID }}
+        gist-token: ${{ secrets.GIST_TOKEN }}
 
   install:
     if: ${{ always() && !failure() && !cancelled() && inputs.skip-install != true }}
@@ -80,6 +83,9 @@ jobs:
       image: ${{ inputs.container-image }}
     steps:
     - uses: yadickson/actions/test@v1
+      with:
+        gist-id: ${{ secrets.GIST_ID }}
+        gist-token: ${{ secrets.GIST_TOKEN }}
 
   coverage:
     if: ${{ always() && !failure() && !cancelled() && inputs.skip-coverage != true }}
@@ -90,6 +96,9 @@ jobs:
       image: ${{ inputs.container-image }}
     steps:
     - uses: yadickson/actions/coverage@v1
+      with:
+        gist-id: ${{ secrets.GIST_ID }}
+        gist-token: ${{ secrets.GIST_TOKEN }}
 
   mutation:
     if: ${{ always() && !failure() && !cancelled() && inputs.skip-mutation != true }}
@@ -102,15 +111,6 @@ jobs:
     - name: install procps
       run: apt-get update && apt-get install -y procps
     - uses: yadickson/actions/mutation@v1
-
-  badge:
-    if: ${{ always() && !failure() && !cancelled() && inputs.skip-badge != true }}
-    needs: [test, coverage, mutation]
-    runs-on: ubuntu-latest
-    container:
-      image: ${{ inputs.container-image }}
-    steps:
-    - uses: yadickson/actions/badge@v1
       with:
         gist-id: ${{ secrets.GIST_ID }}
         gist-token: ${{ secrets.GIST_TOKEN }}
